@@ -24,7 +24,7 @@ sound_generation(){
     divisible "$1" "$2"
     divisible_by=$?
 
-    # If this is divisible, return 1
+    # If this is divisible, emit the sound which is passed in argument 3
     if [[ "$divisible_by" == 1 ]]; then
         return 1
     fi
@@ -33,27 +33,22 @@ sound_generation(){
     return 0
 }
 
+
+# Creating an array to store the sounds
+sounds=("Pling" "Plang" "Plong")
+
 # Check the sound for different divisor
-sound_generation "$1" 3
-sound=$?
+i=0
+for divisor in 3 5 7; do
+    sound_generation "$1" "$divisor"
+    sound=$?
 
-if [[ "$sound" -eq 1 ]]; then
-    factor="Pling"
-fi
-
-sound_generation "$1" 5
-sound=$?
-
-if [[ "$sound" -eq 1 ]]; then
-    factor="$factor""Plang"
-fi
-
-sound_generation "$1" 7
-sound=$?
-
-if [[ "$sound" -eq 1 ]]; then
-    factor="$factor""Plong"
-fi
+    # If the sound have to be generated
+    if [[ sound -eq 1 ]]; then
+        factor+=${sounds[$i]}
+    fi
+    i="$i"+1
+done
 
 # Check if the result is empty (meaning it is not divisible by any number asked)
 if [[ -z "$factor" ]]
@@ -64,3 +59,4 @@ else
     # If this is not empty, return the sound
     echo "$factor"
 fi
+
